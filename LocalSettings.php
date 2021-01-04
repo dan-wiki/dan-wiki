@@ -60,7 +60,7 @@ $wgDBuser = $GLOBALS["wgDBuser"];
 $wgDBpassword = $GLOBALS["wgDBpassword"];
 
 # Postgres specific settings
-$wgDBport = "$GLOBALS["wgDBport"];
+$wgDBport = $GLOBALS["wgDBport"];
 $wgDBmwschema = "mediawiki";
 
 ## Shared memory settings
