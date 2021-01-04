@@ -54,13 +54,13 @@ $wgEmailAuthentication = true;
 
 ## Database settings
 $wgDBtype = "postgres";
-$wgDBserver = "ec2-174-129-37-103.compute-1.amazonaws.com";
-$wgDBname = "de3aeud4dinjh6";
-$wgDBuser = "tronhgswrrevxo";
-$wgDBpassword = "dHE71WgjTWDjuYs3Yl8D0FCGyt";
+$wgDBserver = $GLOBALS["wgDBserver"];
+$wgDBname = $GLOBALS["wgDBname"];
+$wgDBuser = $GLOBALS["wgDBuser"];
+$wgDBpassword = $GLOBALS["wgDBpassword"];
 
 # Postgres specific settings
-$wgDBport = "5432";
+$wgDBport = "$GLOBALS["wgDBport"];
 $wgDBmwschema = "mediawiki";
 
 ## Shared memory settings
@@ -89,14 +89,14 @@ $wgShellLocale = "en_US.utf8";
 # Site language code, should be one of the list in ./languages/data/Names.php
 $wgLanguageCode = "en";
 
-$wgSecretKey = "e0562005df97a54b2a3780e12e289d892a9ebfbf188cb636ed6408b13ad988e1";
+$wgSecretKey = $GLOBALS["wgSecretKey"];
 
 # Changing this will log out all existing sessions.
 $wgAuthenticationTokenVersion = "1";
 
 # Site upgrade key. Must be set to a string (default provided) to turn on the
 # web installer while LocalSettings.php is in place
-$wgUpgradeKey = "b89dfdd3144d8899";
+$wgUpgradeKey = $GLOBALS["wgUpgradeKey"];
 
 ## For attaching licensing metadata to pages, and displaying an
 ## appropriate copyright notice / icon. GNU Free Documentation
@@ -142,7 +142,7 @@ require_once "$IP/extensions/googleAnalytics/googleAnalytics.php";
 
 // Replace xxxxxxx-x with YOUR GoogleAnalytics UA number
 
-$wgGoogleAnalyticsAccount = "UA-53457199-1"; 
+$wgGoogleAnalyticsAccount = $GLOBALS["wgGoogleAnalyticsAccount"];
 
 // Optional Variables (both default to true)
 
