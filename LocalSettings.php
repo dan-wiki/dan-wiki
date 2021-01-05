@@ -54,13 +54,13 @@ $wgEmailAuthentication = true;
 
 ## Database settings
 $wgDBtype = "postgres";
-$wgDBserver = $GLOBALS["wgDBserver"];
-$wgDBname = $GLOBALS["wgDBname"];
-$wgDBuser = $GLOBALS["wgDBuser"];
-$wgDBpassword = $GLOBALS["wgDBpassword"];
+$wgDBserver = getenv("wgDBserver");
+$wgDBname = getenv("wgDBname");
+$wgDBuser = getenv("wgDBuser");
+$wgDBpassword = getenv("wgDBpassword");
 
 # Postgres specific settings
-$wgDBport = $GLOBALS["wgDBport"];
+$wgDBport = getenv("wgDBport");
 $wgDBmwschema = "mediawiki";
 
 ## Shared memory settings
@@ -89,14 +89,14 @@ $wgShellLocale = "en_US.utf8";
 # Site language code, should be one of the list in ./languages/data/Names.php
 $wgLanguageCode = "en";
 
-$wgSecretKey = $GLOBALS["wgSecretKey"];
+$wgSecretKey = getenv("wgSecretKey");
 
 # Changing this will log out all existing sessions.
 $wgAuthenticationTokenVersion = "1";
 
 # Site upgrade key. Must be set to a string (default provided) to turn on the
 # web installer while LocalSettings.php is in place
-$wgUpgradeKey = $GLOBALS["wgUpgradeKey"];
+$wgUpgradeKey = getenv("wgUpgradeKey");
 
 ## For attaching licensing metadata to pages, and displaying an
 ## appropriate copyright notice / icon. GNU Free Documentation
