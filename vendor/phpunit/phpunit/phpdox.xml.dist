@@ -1,23 +1,14 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<phpdox xmlns="http://xml.phpdox.net/config">
- <project name="PHPUnit" source="src" workdir="build/phpdox">
+
+<phpdox xmlns="http://phpdox.de/config">
+ <project name="PHPUnit" source="PHPUnit" workdir="build/phpdox">
   <collector publiconly="false">
    <include mask="*.php" />
+   <exclude mask="*Autoload.php" />
   </collector>
 
   <generator output="build">
-   <enrich base="${basedir}/build/logs">
-    <source type="build" />
-    <source type="git" />
-    <source type="phploc" />
-    <source type="checkstyle" />
-    <source type="pmd" />
-   </enrich>
-
-   <build engine="html" enabled="true" output="api">
-    <file extension="html" />
-   </build>
+   <build engine="html" enabled="true" output="api"/>
   </generator>
  </project>
 </phpdox>
-

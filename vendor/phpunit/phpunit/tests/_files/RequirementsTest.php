@@ -55,6 +55,7 @@ class RequirementsTest extends PHPUnit_Framework_TestCase
     {
     }
 
+
     /**
      * @requires function testFunc
      */
@@ -70,16 +71,8 @@ class RequirementsTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @requires OS Linux
-     */
-    public function testEleven()
-    {
-    }
-
-    /**
      * @requires PHP 99-dev
      * @requires PHPUnit 9-dev
-     * @requires OS DOESNOTEXIST
      * @requires function testFuncOne
      * @requires function testFuncTwo
      * @requires extension testExtOne
@@ -97,23 +90,9 @@ class RequirementsTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @requires function ReflectionMethod::setAccessible
-     */
-    public function testExistingMethod()
-    {
-    }
-
-    /**
      * @requires extension spl
      */
     public function testExistingExtension()
-    {
-    }
-
-    /**
-     * @requires OS .*
-     */
-    public function testExistingOs()
     {
     }
 
@@ -128,21 +107,6 @@ class RequirementsTest extends PHPUnit_Framework_TestCase
      * @requires PHP 9999999
      */
     public function testAlwaysSkip2()
-    {
-    }
-
-    /**
-     * @requires OS DOESNOTEXIST
-     */
-    public function testAlwaysSkip3()
-    {
-    }
-
-    /**
-     * @requires	  extension	  spl
-     * @requires	  OS	  .*
-     */
-    public function testSpace()
     {
     }
 }

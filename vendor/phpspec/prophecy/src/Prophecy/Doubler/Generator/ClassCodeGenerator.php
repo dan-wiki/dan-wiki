@@ -54,15 +54,11 @@ class ClassCodeGenerator
 
     private function generateMethod(Node\MethodNode $method)
     {
-        $php = sprintf("%s %s function %s%s(%s)%s {\n",
+        $php = sprintf("%s %s function %s(%s) {\n",
             $method->getVisibility(),
             $method->isStatic() ? 'static' : '',
-            $method->returnsReference() ? '&':'',
             $method->getName(),
-            implode(', ', $this->generateArguments($method->getArguments())),
-            version_compare(PHP_VERSION, '7.0', '>=') && $method->hasReturnType()
-                ? sprintf(': %s', $method->getReturnType())
-                : ''
+            implode(', ', $this->generateArguments($method->getArguments()))
         );
         $php .= $method->getCode()."\n";
 
@@ -71,38 +67,20 @@ class ClassCodeGenerator
 
     private function generateArguments(array $arguments)
     {
-        return array_map(function (Node\ArgumentNode $argument) {
+        return array_map(function ($argument) {
             $php = '';
 
             if ($hint = $argument->getTypeHint()) {
-                switch ($hint) {
-                    case 'array':
-                    case 'callable':
-                        $php .= $hint;
-                        break;
-
-                    case 'string':
-                    case 'int':
-                    case 'float':
-                    case 'bool':
-                        if (version_compare(PHP_VERSION, '7.0', '>=')) {
-                            $php .= $hint;
-                            break;
-                        }
-                        // Fall-through to default case for PHP 5.x
-
-                    default:
-                        $php .= '\\'.$hint;
+                if ('array' === $hint || 'callable' === $hint) {
+                    $php .= $hint;
+                } else {
+                    $php .= class_exists($hint) || interface_exists($hint) ? '\\'.$hint : $hint;
                 }
             }
 
-            $php .= ' '.($argument->isPassedByReference() ? '&' : '');
+            $php .= ' '.($argument->isPassedByReference() ? '&' : '').'$'.$argument->getName();
 
-            $php .= $argument->isVariadic() ? '...' : '';
-
-            $php .= '$'.$argument->getName();
-
-            if ($argument->isOptional() && !$argument->isVariadic()) {
+            if ($argument->isOptional()) {
                 $php .= ' = '.var_export($argument->getDefault(), true);
             }
 

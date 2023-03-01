@@ -45,8 +45,7 @@ class ClassCreator
      */
     public function create($classname, Node\ClassNode $class)
     {
-        $code = $this->generator->generate($classname, $class);
-        $return = eval($code);
+        $return = eval($this->generator->generate($classname, $class));
 
         if (!class_exists($classname, false)) {
             if (count($class->getInterfaces())) {

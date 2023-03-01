@@ -12,7 +12,6 @@
 namespace Prophecy\Prophecy;
 
 use Prophecy\Argument;
-use Prophecy\Prophet;
 use Prophecy\Promise;
 use Prophecy\Prediction;
 use Prophecy\Exception\Doubler\MethodNotFoundException;
@@ -31,7 +30,6 @@ class MethodProphecy
     private $argumentsWildcard;
     private $promise;
     private $prediction;
-    private $checkedPredictions = array();
     private $bound = false;
 
     /**
@@ -49,7 +47,7 @@ class MethodProphecy
         if (!method_exists($double, $methodName)) {
             throw new MethodNotFoundException(sprintf(
                 'Method `%s::%s()` is not defined.', get_class($double), $methodName
-            ), get_class($double), $methodName, $arguments);
+            ), get_class($double), $methodName);
         }
 
         $this->objectProphecy = $objectProphecy;
@@ -67,34 +65,6 @@ class MethodProphecy
 
         if (null !== $arguments) {
             $this->withArguments($arguments);
-        }
-
-        if (version_compare(PHP_VERSION, '7.0', '>=') && true === $reflectedMethod->hasReturnType()) {
-            $type = (string) $reflectedMethod->getReturnType();
-            $this->will(function () use ($type) {
-                switch ($type) {
-                    case 'string': return '';
-                    case 'float':  return 0.0;
-                    case 'int':    return 0;
-                    case 'bool':   return false;
-                    case 'array':  return array();
-
-                    case 'callable':
-                    case 'Closure':
-                        return function () {};
-
-                    case 'Traversable':
-                    case 'Generator':
-                        // Remove eval() when minimum version >=5.5
-                        /** @var callable $generator */
-                        $generator = eval('return function () { yield; };');
-                        return $generator();
-
-                    default:
-                        $prophet = new Prophet;
-                        return $prophet->prophesize($type)->reveal();
-                }
-            });
         }
     }
 
@@ -169,15 +139,13 @@ class MethodProphecy
     /**
      * Sets return argument promise to the prophecy.
      *
-     * @param int $index The zero-indexed number of the argument to return
-     *
      * @see Prophecy\Promise\ReturnArgumentPromise
      *
      * @return $this
      */
-    public function willReturnArgument($index = 0)
+    public function willReturnArgument()
     {
-        return $this->will(new Promise\ReturnArgumentPromise($index));
+        return $this->will(new Promise\ReturnArgumentPromise);
     }
 
     /**
@@ -291,14 +259,7 @@ class MethodProphecy
             $this->getArgumentsWildcard()
         );
 
-        try {
-            $prediction->check($calls, $this->getObjectProphecy(), $this);
-            $this->checkedPredictions[] = $prediction;
-        } catch (\Exception $e) {
-            $this->checkedPredictions[] = $prediction;
-
-            throw $e;
-        }
+        $prediction->check($calls, $this->getObjectProphecy(), $this);
 
         return $this;
     }
@@ -384,16 +345,6 @@ class MethodProphecy
     public function getPrediction()
     {
         return $this->prediction;
-    }
-
-    /**
-     * Returns predictions that were checked on this object.
-     *
-     * @return Prediction\PredictionInterface[]
-     */
-    public function getCheckedPredictions()
-    {
-        return $this->checkedPredictions;
     }
 
     /**

@@ -11,7 +11,6 @@
 
 namespace Prophecy\Promise;
 
-use Doctrine\Instantiator\Instantiator;
 use Prophecy\Prophecy\ObjectProphecy;
 use Prophecy\Prophecy\MethodProphecy;
 use Prophecy\Exception\InvalidArgumentException;
@@ -25,11 +24,6 @@ use ReflectionClass;
 class ThrowPromise implements PromiseInterface
 {
     private $exception;
-
-    /**
-     * @var \Doctrine\Instantiator\Instantiator
-     */
-    private $instantiator;
 
     /**
      * Initializes promise.
@@ -46,13 +40,13 @@ class ThrowPromise implements PromiseInterface
              && !is_subclass_of($exception, 'Exception')) {
                 throw new InvalidArgumentException(sprintf(
                     'Exception class or instance expected as argument to ThrowPromise, but got %s.',
-                    $exception
+                    gettype($exception)
                 ));
             }
         } elseif (!$exception instanceof \Exception) {
             throw new InvalidArgumentException(sprintf(
                 'Exception class or instance expected as argument to ThrowPromise, but got %s.',
-                is_object($exception) ? get_class($exception) : gettype($exception)
+                gettype($exception)
             ));
         }
 
@@ -78,12 +72,11 @@ class ThrowPromise implements PromiseInterface
             if ($constructor->isPublic() && 0 == $constructor->getNumberOfRequiredParameters()) {
                 throw $reflection->newInstance();
             }
-
-            if (!$this->instantiator) {
-                $this->instantiator = new Instantiator();
+            if (version_compare(PHP_VERSION, '5.4', '<')) {
+                throw unserialize(sprintf('O:%d:"%s":0:{}', strlen($classname), $classname));
             }
 
-            throw $this->instantiator->instantiate($classname);
+            throw $reflection->newInstanceWithoutConstructor();
         }
 
         throw $this->exception;

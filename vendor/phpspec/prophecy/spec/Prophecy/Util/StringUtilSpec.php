@@ -51,11 +51,6 @@ class StringUtilSpec extends ObjectBehavior
         $this->stringify(array('zet', 42))->shouldReturn('["zet", 42]');
     }
 
-    function it_generates_proper_string_representation_for_hash_containing_one_value()
-    {
-        $this->stringify(array('ever' => 'zet'))->shouldReturn('["ever" => "zet"]');
-    }
-
     function it_generates_proper_string_representation_for_hash()
     {
         $this->stringify(array('ever' => 'zet', 52 => 'hey', 'num' => 42))->shouldReturn(
@@ -77,21 +72,8 @@ class StringUtilSpec extends ObjectBehavior
         $objHash = sprintf('%s:%s',
             get_class($object->getWrappedObject()),
             spl_object_hash($object->getWrappedObject())
-        ) . " Object (\n    'objectProphecy' => Prophecy\Prophecy\ObjectProphecy Object (*Prophecy*)\n)";
-
-        $this->stringify($object)->shouldReturn("$objHash");
-    }
-
-    /**
-     * @param stdClass $object
-     */
-    function it_generates_proper_string_representation_for_object_without_exporting($object)
-    {
-        $objHash = sprintf('%s:%s',
-            get_class($object->getWrappedObject()),
-            spl_object_hash($object->getWrappedObject())
         );
 
-        $this->stringify($object, false)->shouldReturn("$objHash");
+        $this->stringify($object)->shouldReturn("$objHash");
     }
 }

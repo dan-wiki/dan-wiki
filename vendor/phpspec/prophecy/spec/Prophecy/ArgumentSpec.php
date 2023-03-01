@@ -67,12 +67,6 @@ class ArgumentSpec extends ObjectBehavior
         $token->shouldBeAnInstanceOf('Prophecy\Argument\Token\ArrayEveryEntryToken');
     }
 
-    function it_has_a_shortcut_for_identical_value_token()
-    {
-        $token = $this->is('value');
-        $token->shouldBeAnInstanceOf('Prophecy\Argument\Token\IdenticalValueToken');
-    }
-
     function it_has_a_shortcut_for_array_entry_token_matching_any_key()
     {
         $token = $this->containing('value');
@@ -97,11 +91,5 @@ class ArgumentSpec extends ObjectBehavior
     {
         $token = $this->containingString('string');
         $token->shouldBeAnInstanceOf('Prophecy\Argument\Token\StringContainsToken');
-    }
-
-    function it_has_a_shortcut_for_approximate_token()
-    {
-        $token = $this->approximate(10);
-        $token->shouldBeAnInstanceOf('Prophecy\Argument\Token\ApproximateValueToken');
     }
 }

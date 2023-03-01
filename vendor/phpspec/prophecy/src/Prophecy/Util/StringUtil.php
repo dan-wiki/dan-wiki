@@ -23,15 +23,14 @@ class StringUtil
     /**
      * Stringifies any provided value.
      *
-     * @param mixed   $value
-     * @param boolean $exportObject
+     * @param mixed $value
      *
      * @return string
      */
-    public function stringify($value, $exportObject = true)
+    public function stringify($value)
     {
         if (is_array($value)) {
-            if (range(0, count($value) - 1) === array_keys($value)) {
+            if (range(0, count($value) - 1) == array_keys($value)) {
                 return '['.implode(', ', array_map(array($this, __FUNCTION__), $value)).']';
             }
 
@@ -46,7 +45,7 @@ class StringUtil
             return get_resource_type($value).':'.$value;
         }
         if (is_object($value)) {
-            return $exportObject ? ExportUtil::export($value) : sprintf('%s:%s', get_class($value), spl_object_hash($value));
+            return sprintf('%s:%s', get_class($value), spl_object_hash($value));
         }
         if (true === $value || false === $value) {
             return $value ? 'true' : 'false';
@@ -78,7 +77,7 @@ class StringUtil
     {
         $self = $this;
 
-        return implode(PHP_EOL, array_map(function (Call $call) use ($self) {
+        return implode(PHP_EOL, array_map(function ($call) use ($self) {
             return sprintf('  - %s(%s) @ %s',
                 $call->getMethodName(),
                 implode(', ', array_map(array($self, 'stringify'), $call->getArguments())),

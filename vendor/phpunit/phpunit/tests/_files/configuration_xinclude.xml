@@ -4,9 +4,7 @@
          backupStaticAttributes="false"
          bootstrap="/path/to/bootstrap.php"
          cacheTokens="false"
-         columns="80"
          colors="false"
-         stderr="false"
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
@@ -18,38 +16,33 @@
          timeoutForSmallTests="1"
          timeoutForMediumTests="10"
          timeoutForLargeTests="60"
-         beStrictAboutTestsThatDoNotTestAnything="false"
-         beStrictAboutOutputDuringTests="false"
-         beStrictAboutTestSize="false"
-         beStrictAboutTodoAnnotatedTests="false"
-         checkForUnintentionallyCoveredCode="false"
-         beStrictAboutChangesToGlobalState="false"
-         verbose="false">
-         <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
-             href="configuration.xml"
-             parse="xml"
-             xpointer="xpointer(/phpunit/testsuites)" />
+         strict="false"
+		 verbose="false">
+		 <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+			 href="configuration.xml"
+			 parse="xml"
+			 xpointer="xpointer(/phpunit/testsuites)" />
 
   <groups>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
-          href="configuration.xml"
-        parse="xml"
-        xpointer="xpointer(/phpunit/groups/*)" />
+	  	href="configuration.xml"
+		parse="xml"
+		xpointer="xpointer(/phpunit/groups/*)" />
   </groups>
 
 
   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
-      href="configuration.xml"
-      parse="xml"
-      xpointer="xpointer(/phpunit/filter)" />
+	  href="configuration.xml"
+	  parse="xml"
+	  xpointer="xpointer(/phpunit/filter)" />
   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
-      href="configuration.xml"
-      parse="xml"
-      xpointer="xpointer(/phpunit/listeners)" />
+	  href="configuration.xml"
+	  parse="xml"
+	  xpointer="xpointer(/phpunit/listeners)" />
   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
-      href="configuration.xml"
-      parse="xml"
-      xpointer="xpointer(/phpunit/logging)" />
+	  href="configuration.xml"
+	  parse="xml"
+	  xpointer="xpointer(/phpunit/logging)" />
 
   <php>
     <includePath>.</includePath>
@@ -68,8 +61,8 @@
   </php>
 
   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
-      href="configuration.xml"
-      parse="xml"
-      xpointer="xpointer(/phpunit/selenium)" />
+	  href="configuration.xml"
+	  parse="xml"
+	  xpointer="xpointer(/phpunit/selenium)" />
 </phpunit>
 

@@ -2,19 +2,21 @@
 phpunit FailureTest ../_files/FailureTest.php
 --FILE--
 <?php
+define('PHPUNIT_TESTSUITE', TRUE);
+
 $_SERVER['argv'][1] = '--no-configuration';
 $_SERVER['argv'][2] = 'FailureTest';
 $_SERVER['argv'][3] = dirname(dirname(__FILE__)) . '/_files/FailureTest.php';
 
-require __DIR__ . '/../bootstrap.php';
+require_once dirname(dirname(dirname(__FILE__))) . '/PHPUnit/Autoload.php';
 PHPUnit_TextUI_Command::main();
 ?>
 --EXPECTF--
-PHPUnit %s by Sebastian Bergmann and contributors.
+PHPUnit %s by Sebastian Bergmann.
 
 FFFFFFFFFFFFF
 
-Time: %s, Memory: %sMb
+Time: %i %s, Memory: %sMb
 
 There were 13 failures:
 
@@ -139,3 +141,4 @@ Failed asserting that format description matches text.
 
 FAILURES!
 Tests: 13, Assertions: 14, Failures: 13.
+

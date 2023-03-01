@@ -54,19 +54,7 @@ class SplFileInfoPatch implements ClassPatchInterface
             $node->addMethod($constructor);
         }
 
-        if ($this->nodeIsDirectoryIterator($node)) {
-            $constructor->setCode('return parent::__construct("' . __DIR__ . '");');
-
-            return;
-        }
-
-        if ($this->nodeIsSplFileObject($node)) {
-            $constructor->setCode('return parent::__construct("' . __FILE__ .'");');
-
-            return;
-        }
-
-        $constructor->useParentCode();
+        $constructor->setCode('return parent::__construct("'.__FILE__.'");');
     }
 
     /**
@@ -77,29 +65,5 @@ class SplFileInfoPatch implements ClassPatchInterface
     public function getPriority()
     {
         return 50;
-    }
-
-    /**
-     * @param ClassNode $node
-     * @return boolean
-     */
-    private function nodeIsDirectoryIterator(ClassNode $node)
-    {
-        $parent = $node->getParentClass();
-
-        return 'DirectoryIterator' === $parent
-            || is_subclass_of($parent, 'DirectoryIterator');
-    }
-
-    /**
-     * @param ClassNode $node
-     * @return boolean
-     */
-    private function nodeIsSplFileObject(ClassNode $node)
-    {
-        $parent = $node->getParentClass();
-
-        return 'SplFileObject' === $parent
-            || is_subclass_of($parent, 'SplFileObject');
     }
 }

@@ -32,17 +32,6 @@ class MethodNodeSpec extends ObjectBehavior
         $this->shouldNotBeStatic();
     }
 
-    function it_does_not_return_a_reference_by_default()
-    {
-        $this->returnsReference()->shouldReturn(false);
-    }
-
-    function it_should_be_settable_as_returning_a_reference_through_setter()
-    {
-        $this->setReturnsReference();
-        $this->returnsReference()->shouldReturn(true);
-    } 
-
     function it_should_be_settable_as_static_through_setter()
     {
         $this->setStatic();
@@ -69,16 +58,13 @@ class MethodNodeSpec extends ObjectBehavior
         $argument1->getName()->willReturn('objectName');
         $argument2->getName()->willReturn('default');
 
-        $argument1->isVariadic()->willReturn(false);
-        $argument2->isVariadic()->willReturn(true);
-
         $this->addArgument($argument1);
         $this->addArgument($argument2);
 
         $this->useParentCode();
 
         $this->getCode()->shouldReturn(
-            'return parent::getTitle($objectName, ...$default);'
+            'return parent::getTitle($objectName, $default);'
         );
     }
 
@@ -86,13 +72,6 @@ class MethodNodeSpec extends ObjectBehavior
     {
         $this->setCode('echo "code";');
         $this->getCode()->shouldReturn('echo "code";');
-    }
-
-    function its_reference_returning_methods_will_generate_exceptions()
-    {
-        $this->setCode('echo "code";');
-        $this->setReturnsReference();
-        $this->getCode()->shouldReturn("throw new \Prophecy\Exception\Doubler\ReturnByReferenceException('Returning by reference not supported', get_class(\$this), 'getTitle');");
     }
 
     function its_setCode_provided_with_null_cleans_method_body()
@@ -122,20 +101,5 @@ class MethodNodeSpec extends ObjectBehavior
         $this->addArgument($argument2);
 
         $this->getArguments()->shouldReturn(array($argument1, $argument2));
-    }
-
-    function it_does_not_have_return_type_by_default()
-    {
-        $this->hasReturnType()->shouldReturn(false);
-    }
-
-    function it_setReturnType_sets_return_type()
-    {
-        $returnType = 'string';
-
-        $this->setReturnType($returnType);
-
-        $this->hasReturnType()->shouldReturn(true);
-        $this->getReturnType()->shouldReturn($returnType);
     }
 }

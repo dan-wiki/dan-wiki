@@ -11,8 +11,6 @@
 
 namespace Prophecy\Doubler;
 
-use Doctrine\Instantiator\Instantiator;
-use Prophecy\Doubler\ClassPatch\ClassPatchInterface;
 use Prophecy\Doubler\Generator\ClassMirror;
 use Prophecy\Doubler\Generator\ClassCreator;
 use Prophecy\Exception\InvalidArgumentException;
@@ -31,14 +29,9 @@ class Doubler
     private $namer;
 
     /**
-     * @var ClassPatchInterface[]
+     * @var ClassPatch\ClassPatchInterface[]
      */
     private $patches = array();
-
-    /**
-     * @var \Doctrine\Instantiator\Instantiator
-     */
-    private $instantiator;
 
     /**
      * Initializes doubler.
@@ -58,7 +51,7 @@ class Doubler
     /**
      * Returns list of registered class patches.
      *
-     * @return ClassPatchInterface[]
+     * @return ClassPatch\ClassPatchInterface[]
      */
     public function getClassPatches()
     {
@@ -68,13 +61,13 @@ class Doubler
     /**
      * Registers new class patch.
      *
-     * @param ClassPatchInterface $patch
+     * @param ClassPatch\ClassPatchInterface $patch
      */
-    public function registerClassPatch(ClassPatchInterface $patch)
+    public function registerClassPatch(ClassPatch\ClassPatchInterface $patch)
     {
         $this->patches[] = $patch;
 
-        @usort($this->patches, function (ClassPatchInterface $patch1, ClassPatchInterface $patch2) {
+        @usort($this->patches, function ($patch1, $patch2) {
             return $patch2->getPriority() - $patch1->getPriority();
         });
     }
@@ -113,11 +106,7 @@ class Doubler
             return $reflection->newInstance();
         }
 
-        if (!$this->instantiator) {
-            $this->instantiator = new Instantiator();
-        }
-
-        return $this->instantiator->instantiate($classname);
+        return $this->createInstanceWithoutConstructor($reflection);
     }
 
     /**
@@ -142,5 +131,55 @@ class Doubler
         $this->creator->create($name, $node);
 
         return $name;
+    }
+
+    /**
+     * Creates an instance without using its constructor using different strategies
+     *
+     * @param ReflectionClass $reflection
+     *
+     * @return object
+     */
+    private function createInstanceWithoutConstructor(ReflectionClass $reflection)
+    {
+        if (version_compare(PHP_VERSION, '5.4', '>=')) {
+            if ($class = $this->createInstanceWithoutConstructorUsingReflection($reflection)) {
+                return $class;
+            }
+        }
+
+        return $this->createInstanceWithoutConstructorUsingUnserialize($reflection);
+    }
+
+    /**
+     * Creates an instance bypassing the constructor using unserialization
+     *
+     * @param ReflectionClass $reflection
+     *
+     * @return object
+     */
+    private function createInstanceWithoutConstructorUsingUnserialize(ReflectionClass $reflection)
+    {
+        $classname = $reflection->getName();
+        $serializedObject = sprintf('O:%d:"%s":0:{}', strlen($classname), $classname);
+
+        return @unserialize($serializedObject);
+    }
+
+    /**
+     * Creates an instance bypassing the constructor using reflection, or null on failure
+     *
+     * @param ReflectionClass $reflection
+     *
+     * @return object|null
+     */
+    private function createInstanceWithoutConstructorUsingReflection(ReflectionClass $reflection)
+    {
+        try {
+            return $reflection->newInstanceWithoutConstructor();
+        } catch (\ReflectionException $e) {
+            // certain internal types can't have their constructor skipped
+            return null;
+        }
     }
 }
