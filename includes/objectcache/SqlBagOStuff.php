@@ -170,7 +170,7 @@ class SqlBagOStuff extends BagOStuff {
 					$db = wfGetDB( $index );
 				}
 			}
-			$this->logger->debug( sprintf( "Connection %s will be used for SqlBagOStuff", $db ) );
+			//$this->logger->debug( sprintf( "Connection %s will be used for SqlBagOStuff", $db ) ); // commented out by Dan 2023-03-01
 			$this->conns[$serverIndex] = $db;
 		}
 
