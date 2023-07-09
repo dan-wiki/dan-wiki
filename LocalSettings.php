@@ -31,8 +31,8 @@ $wgMetaNamespace = "Project";
 $wgScriptPath = "";
 
 ## The protocol and server name to use in fully-qualified URLs
-#$wgServer = "https://danwiki.herokuapp.com";
-$wgServer = "http://www.dan.wiki";
+$wgServer = "https://danwiki.herokuapp.com";
+#$wgServer = "http://www.dan.wiki";
 #$wgServer = "dan.wiki";
 
 ## The URL path to static resources (images, scripts, etc.)
